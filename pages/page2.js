@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import styled from "styled-components";
 import { motion, AnimateSharedLayout, AnimatePresence } from "framer-motion";
 
@@ -80,7 +79,6 @@ const ProductList = styled(motion.ul)`
 `;
 
 const ProductCard = styled(motion.li)`
-  z-index: 0;
   display: flex;
   background: #fff;
   flex-direction: column;
@@ -100,33 +98,46 @@ const ProductCard = styled(motion.li)`
   }
 `;
 
+const ProductModal = styled(motion.li)`
+  z-index: 1;
+  display: flex;
+  overflow: hidden;
+  background: #fff;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  border-radius: 5px;
+
+  box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.2);
+
+  img {
+    height: 400px;
+    object-fit: cover;
+    width: 100%;
+  }
+`;
+
+const modelData = {
+  name: "Chicken, Protein Noodles & Greens",
+  macros: { calories: 471, protein: 33, carbs: 56, fat: 12 },
+  type: "chicken dish",
+  image: "https://system.modelhealthkitchen.com/storage/images/TMfVMFjQHK.png",
+};
+
 const Index = () => {
-  const [modelData, setModelData] = useState(null);
   return (
-    <ProductList>
-      {data.map((item, index) => (
-        <Link href="/page2">
-          <ProductCard
-            key={item.name}
-            onClick={() => {
-              setModelData(item);
-            }}
-          >
-            <>
-              <motion.img
-                animate={{
-                  borderRadius: "100px",
-                }}
-                layoutId={index === 0 ? item.name : null}
-                src={item.image}
-                alt={item.name}
-              />
-              <motion.h2>{item.name}</motion.h2>
-            </>
-          </ProductCard>
-        </Link>
-      ))}
-    </ProductList>
+    <ProductModal style={{ width: "100%", height: "100%" }}>
+      <motion.img
+        animate={{
+          borderRadius: "0px",
+        }}
+        layoutId={modelData.name}
+        src={modelData.image}
+        alt={modelData.name}
+      />
+      <motion.h2>{modelData.name}</motion.h2>
+      <motion.button onClick={() => setModelData(null)}>Close</motion.button>
+    </ProductModal>
   );
 };
 
